@@ -1,23 +1,40 @@
-import { Component, inject  } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DbServiceService } from './services/db-service.service';
+import { LinkService } from './services/link.service.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, CommonModule, FormsModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'link-shortener';
+export class AppComponent implements OnInit {
   newUrl: string = '';
-  urlDb = inject(DbServiceService);
+  urlDb = inject(LinkService);
 
-  generateUrl(oldUrl: string) {
-    return this.urlDb.addUrl(oldUrl);
-    this.newUrl = 'https://short.ly/abc123';
+  async ngOnInit() {
+    await this.redirectIfHash();
+  }
+
+  async generateUrl(oldUrl: string) {
+    try {
+      const entry = await this.urlDb.addUrl(oldUrl);
+      this.newUrl = `https://JoseM97.github.io/link-shortener/${entry.new_url}`;
+    } catch (error) {
+      console.error('Generation fails.', error);
+    }
+  }
+
+  async redirectIfHash() {
+    const hash = window.location.hash.substring(1);
+    if (!hash) return;
+
+    const originalUrl = await this.urlDb.getOriginalUrl(hash);
+    if (originalUrl) {
+      window.location.href = originalUrl;
+    }
   }
 }

@@ -1,16 +1,11 @@
 <main>
   <div>
     <form (ngSubmit)="generateUrl(linkInput.value)">
-      <div class="bb1">
-        <label for="link">Enter the link you want to shorten.</label>
-        <div class="bb2">
-          <input id="link" type="text" placeholder="https://www.example.com" #linkInput/>
-          <button>Generate</button>
-        </div>
-      </div>
+      <input #linkInput type="text" placeholder="https://www.example.com" />
+      <button type="submit">Generate</button>
     </form>
     <p *ngIf="newUrl">
-      Short link: {{ newUrl }}
+      Short link: <a [href]="newUrl" target="_blank">{{ newUrl }}</a>
     </p>
   </div>  
 </main>
