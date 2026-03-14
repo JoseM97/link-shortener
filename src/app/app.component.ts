@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   async generateUrl(oldUrl: string) {
     try {
       const entry = await this.urlDb.addUrl(oldUrl);
-      this.newUrl = `https://JoseM97.github.io/link-shortener/${entry.new_url}`;
+      this.newUrl = `https://JoseM97.github.io/link-shortener/#${entry.new_url}`;
     } catch (error) {
       console.error('Generation fails.', error);
     }
