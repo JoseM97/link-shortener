@@ -1,11 +1,41 @@
 <main>
-  <div>
+  <div class="form-card">
+
+    <div class="title-container">
+      <img src="assets/logo.png" alt="logo" class="logo">
+      <h1 class="form-title">Shorten your link</h1>
+    </div>
+
     <form (ngSubmit)="generateUrl(linkInput.value)">
-      <input #linkInput type="text" placeholder="https://www.example.com" />
-      <button type="submit">Generate</button>
+
+      <input
+        #linkInput
+        class="url-input"
+        type="text"
+        placeholder="https://www.example.com"
+      />
+
+      <button class="btn btn-primary generate-btn" type="submit">
+        Generate
+      </button>
+
     </form>
-    <p *ngIf="newUrl">
-      Short link: <a [href]="newUrl" target="_blank">{{ newUrl }}</a>
-    </p>
-  </div>  
+
+    <div *ngIf="newUrl" class="result-box">
+    <div class="result-header">
+      <a [href]="newUrl" target="_blank" class="short-link">{{ newUrl }}</a>
+      <button class="btn btn-sm btn-link copy-btn" (click)="copyUrl()" title="Copy">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M10 1H2a1 1 0 0 0-1 1v10h1V2h8V1z"/>
+          <path d="M4 4h10v10H4V4zm1 1v8h8V5H5z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  </div>
 </main>
+
+<div *ngIf="isRedirecting" class="redirect-overlay">
+  <div class="spinner"></div>
+</div>

@@ -14,6 +14,7 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent implements OnInit {
   newUrl: string = '';
   urlDb = inject(LinkService);
+  isRedirecting = false;
 
   async ngOnInit() {
     await this.redirectIfHash();
@@ -34,7 +35,18 @@ export class AppComponent implements OnInit {
 
     const originalUrl = await this.urlDb.getOriginalUrl(hash);
     if (originalUrl) {
+      this.isRedirecting = true;
+      await new Promise(r => requestAnimationFrame(r));
       window.location.href = originalUrl;
     }
+  }
+
+  copyUrl() {
+    if (!this.newUrl) return;
+    navigator.clipboard.writeText(this.newUrl)
+      .then(() => {
+        alert('URL copied to clipboard!');
+      })
+      .catch(err => console.error('Failed to copy:', err));
   }
 }
